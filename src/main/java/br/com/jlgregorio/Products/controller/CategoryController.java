@@ -34,7 +34,17 @@ public class CategoryController {
         return new ResponseEntity<>(found, HttpStatus.OK);
     }
 
+    @PutMapping
+    public ResponseEntity<CategoryModel> update(@RequestBody CategoryModel categoryModel){
+        var updated = categoryService.update(categoryModel);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
+    }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable long id){
+        categoryService.delete(id);
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+    }
 
 
 

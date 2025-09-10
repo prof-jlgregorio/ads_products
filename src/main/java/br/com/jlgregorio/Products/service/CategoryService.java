@@ -32,6 +32,19 @@ public class CategoryService {
         return categoryRepository.findByNameContainsIgnoreCase(name);
     }
 
+    public CategoryModel update(CategoryModel categoryModel){
+        var found = categoryRepository.findById(categoryModel.getId())
+                .orElseThrow( ()-> new ResourceNotFoundException(
+                        "Categoria não encontrada!"));
+        found.setName(categoryModel.getName());
+        return categoryRepository.save(found);
+    }
 
+    public void delete(long id){
+        var found = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Categoria não encontrada!"));
+        categoryRepository.delete(found);
+    }
 
 }
