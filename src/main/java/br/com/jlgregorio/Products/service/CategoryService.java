@@ -1,6 +1,8 @@
 package br.com.jlgregorio.Products.service;
 
+import br.com.jlgregorio.Products.dto.CategoryDto;
 import br.com.jlgregorio.Products.exceptions.ResourceNotFoundException;
+import br.com.jlgregorio.Products.mapper.CustomModelMapper;
 import br.com.jlgregorio.Products.model.CategoryModel;
 import br.com.jlgregorio.Products.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,30 +16,36 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public CategoryModel create(CategoryModel categoryModel){
-        return categoryRepository.save(categoryModel);
+    public CategoryDto create(CategoryDto categoryDto){
+        CategoryModel categoryModel = CustomModelMapper.parseObject(
+                categoryDto, CategoryModel.class);
+        var result = categoryRepository.save(categoryModel);
+        return CustomModelMapper.parseObject(result, CategoryDto.class);
     }
 
-    public CategoryModel findById(long id){
+    public CategoryDto findById(long id){
         CategoryModel found = categoryRepository.findById(id)
                 .orElseThrow( ()-> new ResourceNotFoundException("Categoria não encontrada!"));
-        return found;
+        return CustomModelMapper.parseObject(found, CategoryDto.class);
     }
 
-    public List<CategoryModel> findAll(){
-        return categoryRepository.findAll();
+    public List<CategoryDto> findAll(){
+        var categories = categoryRepository.findAll();
+        return CustomModelMapper.parseObjectList(categories, CategoryDto.class);
     }
 
-    public List<CategoryModel> findByName(String name){
-        return categoryRepository.findByNameContainsIgnoreCase(name);
+    public List<CategoryDto> findByName(String name){
+        var categories = categoryRepository.findByNameContainsIgnoreCase(name);
+        return CustomModelMapper.parseObjectList(categories, CategoryDto.class);
     }
 
-    public CategoryModel update(CategoryModel categoryModel){
-        var found = categoryRepository.findById(categoryModel.getId())
+    public CategoryDto update(CategoryDto categoryDto){
+        var found = categoryRepository.findById(categoryDto.getId())
                 .orElseThrow( ()-> new ResourceNotFoundException(
                         "Categoria não encontrada!"));
-        found.setName(categoryModel.getName());
-        return categoryRepository.save(found);
+        found.setName(categoryDto.getName());
+        return CustomModelMapper.parseObject(categoryRepository.save(found),
+                CategoryDto.class);
     }
 
     public void delete(long id){

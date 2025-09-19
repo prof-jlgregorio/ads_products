@@ -1,5 +1,6 @@
 package br.com.jlgregorio.Products.controller;
 
+import br.com.jlgregorio.Products.dto.CategoryDto;
 import br.com.jlgregorio.Products.model.CategoryModel;
 import br.com.jlgregorio.Products.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,26 +18,26 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<List<CategoryModel>> findAll(){
-        List<CategoryModel> categories = categoryService.findAll();
+    public ResponseEntity<List<CategoryDto>> findAll(){
+        List<CategoryDto> categories = categoryService.findAll();
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<CategoryModel> create(@RequestBody CategoryModel categoryModel){
-        CategoryModel created = categoryService.create(categoryModel);
+    public ResponseEntity<CategoryDto> create(@RequestBody CategoryDto categoryDto){
+        CategoryDto created = categoryService.create(categoryDto);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryModel> findById(@PathVariable("id") long id){
-        CategoryModel found = categoryService.findById(id);
+    public ResponseEntity<CategoryDto> findById(@PathVariable("id") long id){
+        CategoryDto found = categoryService.findById(id);
         return new ResponseEntity<>(found, HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<CategoryModel> update(@RequestBody CategoryModel categoryModel){
-        var updated = categoryService.update(categoryModel);
+    public ResponseEntity<CategoryDto> update(@RequestBody CategoryDto categoryDto){
+        var updated = categoryService.update(categoryDto);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
